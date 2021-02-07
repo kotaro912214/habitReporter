@@ -1,22 +1,31 @@
 from enum import Enum
+import glob
+
+
+DAILY_REPORT_BASE_PATH = '/Users/kotaro-seki/Documents/my-knowledge/report/daily/'
 
 
 class Tag(Enum):
-    weight = 'kg'
+    weight = 'weight'
     calorie = 'kcal'
+
+    def get_tag(self):
+        return '#' + self.value
 
 
 def main():
-    datalist = read_data('sample.txt')
     weight_list = []
     calorie_list = []
-    for data in datalist:
-        if Tag.weight.value in data:
-            weight_list.append(extract_value(data))
-            continue
-        if Tag.calorie.value in data:
-            calorie_list.append(extract_value(data))
-            continue
+    file_paths = glob.glob(DAILY_REPORT_BASE_PATH + '*')
+    for file_path in file_paths:
+        datalist = read_data(file_path)
+        for data in datalist:
+            if Tag.weight.get_tag() in data:
+                weight_list.append(extract_value(data))
+                continue
+            if Tag.calorie.get_tag() in data:
+                calorie_list.append(extract_value(data))
+                continue
     print(weight_list)
     print(calorie_list)
 
@@ -29,10 +38,10 @@ def read_data(filepath):
 
 
 def extract_value(data):
-    a, b = data.split()
-    if '#' in a:
-        return b
-    return a
+    strings = data.split()
+    for string in strings:
+        if '#' not in string:
+            return string
 
 
 if __name__ == '__main__':
