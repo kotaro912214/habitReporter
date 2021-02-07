@@ -1,5 +1,6 @@
 from enum import Enum
 import glob
+import dash
 
 
 DAILY_REPORT_BASE_PATH = '/Users/kotaro-seki/Documents/my-knowledge/report/daily/'
