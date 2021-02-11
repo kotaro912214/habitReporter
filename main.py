@@ -3,6 +3,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objs as go
 
+import os
 import glob
 
 DAILY_REPORT_PATH = '/Users/kotaro-seki/Documents/my-knowledge/report/daily/'
@@ -19,7 +20,7 @@ def main():
     for tag in tags:
         data_dic[tag] = []
         date_dic[tag] = []
-    file_paths = glob.glob(DAILY_REPORT_PATH + '*')
+    file_paths = get_file_paths()
     file_paths.sort()
     for file_path in file_paths:
         lines = read_data(file_path)
@@ -38,6 +39,19 @@ def main():
         html.H1(children='Daily Report Dashboard'),
         *graphs
     ])
+
+
+def get_file_paths() -> [str]:
+    file_paths = []
+    unknown_paths = glob.glob(DAILY_REPORT_PATH + '*')
+    while len(unknown_paths) > 0:
+        for i, unknown_path in enumerate(unknown_paths):
+            if os.path.isdir(unknown_path):
+                unknown_paths += glob.glob(unknown_path + '/*')
+            else:
+                file_paths.append(unknown_path)
+            unknown_paths = unknown_paths[:i] + unknown_paths[i + 1:]
+    return file_paths
 
 
 def read_data(file_path) -> [str]:
