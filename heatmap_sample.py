@@ -18,7 +18,7 @@ def main():
 
 def display_year():
     year = datetime.date.today().year
-    data = np.random.randint(2, size=(365,))
+    data = np.random.randint(10, size=(365,))
 
     d1 = datetime.date(year, 1, 1)
     d2 = datetime.date(year, 12, 31)
@@ -29,11 +29,9 @@ def display_year():
     month_days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     month_positions = (np.cumsum(month_days) - 15) / 7
 
-    dates_in_year = [d1 + datetime.timedelta(i) for i in
-                     range(delta.days + 1)]
+    dates_in_year = [d1 + datetime.timedelta(i) for i in range(delta.days + 1)]
     # gives me a list with datetimes for each day a year
-    weekdays_in_year = [i.weekday() for i in
-                        dates_in_year]
+    weekdays_in_year = [i.weekday() for i in dates_in_year]
     # gives [0,1,2,3,4,5,6,0,1,2,3,4,5,6,…] (ticktext in xaxis dict translates this to weekdays
 
     week_number_of_dates = []
@@ -43,50 +41,16 @@ def display_year():
             week_number = "00"
         week_number_of_dates.append(week_number)
 
-    text = [str(i) for i in
-            dates_in_year]
-    # gives something like list of strings like ‘2018-01-25’ for each date. Used in data trace to make good hovertext.
-    # 4cc417 green #347c17 dark green
-    # color_scale = [[False, '#eeeeee'], [True, '#76cf63']]
-    color_scale = [
-        [0, '#eee'],
-        [0.5, '#666'],
-        [1.0, '#000']
+    text = [str(i) for i in dates_in_year]
+    binary_color_scale = [
+        [False, "#EAEDF0"],
+        [True, "#C7E48B"]
     ]
-    # color_scale = [
-    #     [0, "rgb(235, 237, 240)"],
-    #     [0.1, "rgb(240, 255, 244)"],
-    #
-    #     [0.1, "rgb(220, 255, 228)"],
-    #     [0.2, "rgb(220, 255, 228)"],
-    #
-    #     [0.2, "rgb(190, 245, 203)"],
-    #     [0.3, "rgb(190, 245, 203)"],
-    #
-    #     [0.3, "rgb(133, 232, 157)"],
-    #     [0.4, "rgb(133, 232, 157)"],
-    #
-    #     [0.4, "rgb(52, 208, 88)"],
-    #     [0.5, "rgb(52, 208, 88)"],
-    #
-    #     [0.5, "rgb(40, 167, 69)"],
-    #     [0.6, "rgb(40, 167, 69)"],
-    #
-    #     [0.6, "rgb(34, 134, 58)"],
-    #     [0.7, "rgb(34, 134, 58)"],
-    #
-    #     [0.7, "rgb(23, 111, 44)"],
-    #     [0.8, "rgb(23, 111, 44)"],
-    #
-    #     [0.8, "rgb(22, 92, 38)"],
-    #     [0.9, "rgb(22, 92, 38)"],
-    #
-    #     [0.9, "rgb(20, 70, 32)"],
-    #     [1.0, "rgb(20, 70, 32)"]
-    # ]
-
-
-    # handle end of year
+    color_scale = [
+        [0, "#EAEDF0"],
+        [0.2, "#C7E48B"],
+        [1.0, "#1D6922"]
+    ]
 
     data = [
         go.Heatmap(
@@ -97,7 +61,7 @@ def display_year():
             hoverinfo='text',
             xgap=3,
             ygap=3,
-            showscale=False,
+            showscale=True,
             colorscale=color_scale
         )
     ]
