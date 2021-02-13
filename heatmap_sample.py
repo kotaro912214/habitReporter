@@ -8,7 +8,9 @@ import plotly.graph_objs as go
 
 
 def main():
-    fig = display_year()
+    data = np.random.randint(10, size=(365,))
+    is_binary = False
+    fig = make_glass_fig(data, is_binary)
     app = dash.Dash()
     app.layout = html.Div([
         dcc.Graph(id='heatmap-test', figure=fig)
@@ -16,9 +18,8 @@ def main():
     app.run_server(debug=True)
 
 
-def display_year():
+def make_glass_fig(data, is_binary):
     year = datetime.date.today().year
-    data = np.random.randint(10, size=(365,))
 
     d1 = datetime.date(year, 1, 1)
     d2 = datetime.date(year, 12, 31)
@@ -30,9 +31,7 @@ def display_year():
     month_positions = (np.cumsum(month_days) - 15) / 7
 
     dates_in_year = [d1 + datetime.timedelta(i) for i in range(delta.days + 1)]
-    # gives me a list with datetimes for each day a year
     weekdays_in_year = [i.weekday() for i in dates_in_year]
-    # gives [0,1,2,3,4,5,6,0,1,2,3,4,5,6,…] (ticktext in xaxis dict translates this to weekdays
 
     week_number_of_dates = []
     for date in dates_in_year:
@@ -42,15 +41,7 @@ def display_year():
         week_number_of_dates.append(week_number)
 
     text = [str(i) for i in dates_in_year]
-    binary_color_scale = [
-        [False, "#EAEDF0"],
-        [True, "#C7E48B"]
-    ]
-    color_scale = [
-        [0, "#EAEDF0"],
-        [0.2, "#C7E48B"],
-        [1.0, "#1D6922"]
-    ]
+    color_scale = [[False, "#EAEDF0"], [True, "#C7E48B"]] if is_binary else [[0, "#EAEDF0"], [0.2, "#C7E48B"], [1.0, "#1D6922"]]
 
     data = [
         go.Heatmap(
