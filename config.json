@@ -1,0 +1,30 @@
+{
+  "base_dir": "/Users/kotaro-seki/Documents/my-knowledge/report/daily",
+  "items": [
+    {
+      "label": "#weight",
+      "is_binary": false
+    },
+    {
+      "label": "#kcal",
+      "title": "#calorie",
+      "is_binary": false
+    },
+    {
+      "label": "#training",
+      "is_binary": true
+    },
+    {
+      "label": "#musclePain",
+      "is_binary": true
+    },
+    {
+      "label": "#sleep",
+      "is_binary": false
+    },
+    {
+      "label": "#e-typing",
+      "is_binary": false
+    }
+  ]
+}
