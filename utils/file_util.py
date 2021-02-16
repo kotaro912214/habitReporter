@@ -9,14 +9,11 @@ class FileUtil:
     @staticmethod
     def get_recursive_file_paths(target_dir) -> [str]:
         file_paths = []
-        unknown_paths = glob.glob(target_dir)
-        while len(unknown_paths) > 0:
-            for i, unknown_path in enumerate(unknown_paths):
-                if os.path.isdir(unknown_path):
-                    unknown_paths += glob.glob(unknown_path + '/*')
-                else:
-                    file_paths.append(unknown_path)
-                unknown_paths = unknown_paths[:i] + unknown_paths[i + 1:]
+        if not os.path.isdir(target_dir):
+            return [target_dir]
+        unknown_paths = glob.glob(target_dir + "/*")
+        for unknown_path in unknown_paths:
+            file_paths += FileUtil.get_recursive_file_paths(unknown_path)
         return file_paths
 
     @staticmethod
