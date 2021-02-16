@@ -15,23 +15,24 @@ class HabitReporter:
     def make_habit_report_figs(self):
         labels: [str] = self.config.get_labels()
         data_dic = {}
-        date_dic = {}
         for label in labels:
-            data_dic[label] = []
-            date_dic[label] = []
+            data_dic[label] = {}
         file_paths: [str] = FileUtil.get_recursive_file_paths(self.config.get_base_dir())
-        file_paths.sort()
         for file_path in file_paths:
             lines = FileUtil.read_lines(file_path)
             for line in lines:
                 for label in labels:
                     if label in line:
                         value = HabitReporter.extract_value_float(line)
-                        date_dic[label].append(HabitReporter.extract_date(file_path))
-                        data_dic[label].append(value)
+                        if value is None:
+                            continue
+                        data_dic[label][HabitReporter.extract_date(file_path)] = value
         figs = []
         for label in labels:
-            fig = go.Figure(data=[go.Scatter(x=date_dic[label], y=data_dic[label])], layout_title_text=label)
+            sorted_tuple = sorted(data_dic[label].items(), key=lambda x:x[0])
+            x = [t[0] for t in sorted_tuple]
+            y = [t[1] for t in sorted_tuple]
+            fig = go.Figure(data=[go.Scatter(x=x, y=y)], layout_title_text=label)
             figs.append(dcc.Graph(id=label, figure=fig))
         return figs
 
