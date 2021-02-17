@@ -1,9 +1,11 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-import plotly.graph_objs as go
+import numpy as np
 
 from config import Config
+from grass_chart import GrassChart
+from line_chart import LineChart
 from utils.file_util import FileUtil
 
 
@@ -12,33 +14,43 @@ class HabitReporter:
         self.config = Config()
         self.config.read_config()
 
-    def make_habit_report_figs(self):
-        labels: [str] = self.config.get_labels()
+    def make_habit_report_figs(self) -> [dcc.Graph]:
+        labels = self.config.get_labels()
+        date_value_dic = self.make_date_value_dic()
+        figs = []
+        for label in labels:
+            x = list(date_value_dic[label].keys())
+            y = list(date_value_dic[label].values())
+            if self.config.is_binary(label):
+                z = np.random.randint(10, size=(365,))
+                fig = GrassChart.make_glass_fig(z=z, is_binary=True, title=label)
+            else:
+                fig = LineChart.make_line_chart(x, y, label)
+            figs.append(dcc.Graph(id=label, figure=fig))
+        return figs
+
+    def make_date_value_dic(self) -> dict:
+        labels = self.config.get_labels()
         data_dic = {}
         for label in labels:
             data_dic[label] = {}
-        file_paths: [str] = FileUtil.get_recursive_file_paths(self.config.get_base_dir())
+        file_paths = FileUtil.get_recursive_file_paths(self.config.get_base_dir())
+        file_paths.sort(key=lambda x: x.split("/")[-1])
         for file_path in file_paths:
             lines = FileUtil.read_lines(file_path)
             for line in lines:
                 for label in labels:
-                    if label in line:
-                        value = HabitReporter.extract_value_float(line)
-                        if value is None:
-                            continue
-                        data_dic[label][HabitReporter.extract_date(file_path)] = value
-        figs = []
-        for label in labels:
-            sorted_tuple = sorted(data_dic[label].items(), key=lambda x:x[0])
-            x = [t[0] for t in sorted_tuple]
-            y = [t[1] for t in sorted_tuple]
-            fig = go.Figure(data=[go.Scatter(x=x, y=y)], layout_title_text=label)
-            figs.append(dcc.Graph(id=label, figure=fig))
-        return figs
+                    if label not in line:
+                        continue
+                    value = HabitReporter.extract_value_float(line)
+                    if value is None:
+                        continue
+                    data_dic[label][HabitReporter.extract_date(file_path)] = value
+        return data_dic
 
     @staticmethod
-    def extract_value_float(data) -> float:
-        strings = data.split()
+    def extract_value_float(line) -> float:
+        strings = line.split()
         float_value = None
         for string in strings:
             if '#' not in string:
@@ -50,8 +62,8 @@ class HabitReporter:
 
     @staticmethod
     def extract_date(file_path) -> str:
-        file_names = file_path.split('/')
-        return file_names[-1].split('.')[0]
+        file_name = file_path.split('/')[-1]
+        return file_name.split('.')[0]
 
 
 def main():
