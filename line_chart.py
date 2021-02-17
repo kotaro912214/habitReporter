@@ -13,7 +13,7 @@ class LineChart:
 
     @staticmethod
     def make_line_chart(x, y, layout_title_text) -> go.Figure:
-        return go.Figure(data=[go.Scatter(x=x, y=y)], layout_title_text=layout_title_text)
+        return go.Figure(data=[go.Scatter(x=x, y=y, mode="lines+markers")], layout_title_text=layout_title_text)
 
 
 def main():

@@ -1,10 +1,10 @@
-import datetime
-
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objs as go
 import numpy as np
+
+from utils.date_util import DateUtil
 
 
 class GrassChart:
@@ -13,7 +13,7 @@ class GrassChart:
 
     @staticmethod
     def make_glass_fig(z, is_binary, title):
-        dates_in_year = GrassChart.make_dates_in_year()
+        dates_in_year = DateUtil.make_dates_in_year()
         weekdays_in_year = [i.weekday() for i in dates_in_year]
         week_number_of_dates = GrassChart.make_week_number_of_dates(dates_in_year)
         text = [str(i) for i in dates_in_year]
@@ -40,17 +40,6 @@ class GrassChart:
         layout = GrassChart.make_layout(title)
         fig = go.Figure(data=data, layout=layout)
         return fig
-
-    @staticmethod
-    def make_dates_in_year():
-        year = datetime.date.today().year
-
-        d1 = datetime.date(year, 1, 1)
-        d2 = datetime.date(year, 12, 31)
-
-        delta = d2 - d1
-        dates_in_year = [d1 + datetime.timedelta(i) for i in range(delta.days + 1)]
-        return dates_in_year
 
     @staticmethod
     def make_week_number_of_dates(dates_in_year):
