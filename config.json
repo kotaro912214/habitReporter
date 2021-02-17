@@ -23,7 +23,11 @@
       "is_binary": false
     },
     {
-      "label": "#e-typing",
+      "label": "#eTyping",
+      "is_binary": false
+    },
+    {
+      "label": "#rubiksCube",
       "is_binary": false
     }
   ]
