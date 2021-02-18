@@ -1,6 +1,0 @@
-#weight
-#kcal
-#training
-#musclePain
-#sleep
-#e-typing
