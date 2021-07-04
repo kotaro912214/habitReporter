@@ -32,7 +32,7 @@ class GrassChart:
                 hoverinfo='text',
                 xgap=3,
                 ygap=3,
-                showscale=True,
+                showscale=False,
                 colorscale=color_scale,
                 zmin=0,
                 zmax=1,
