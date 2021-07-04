@@ -6,11 +6,6 @@
       "is_binary": false
     },
     {
-      "label": "#kcal",
-      "title": "#calorie",
-      "is_binary": false
-    },
-    {
       "label": "#training",
       "is_binary": true
     },
@@ -19,15 +14,15 @@
       "is_binary": true
     },
     {
-      "label": "#sleep",
-      "is_binary": false
+      "label": "#listening",
+      "is_binary": true
+    },
+    {
+      "label": "#word",
+      "is_binary": true
     },
     {
       "label": "#eTyping",
-      "is_binary": false
-    },
-    {
-      "label": "#rubiksCube",
       "is_binary": false
     }
   ]
